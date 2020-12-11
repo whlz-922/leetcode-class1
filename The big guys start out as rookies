@@ -1,0 +1,138 @@
+/****TPractices for improving coding capabilities!*/
+#include<iostream>
+#include<string>
+using namespace std;
+
+/* Practice1: Find the index whose sum of the two numbers is the target value;
+               for example:
+                    nums = {1, 5, 10, 12, 8};
+                    target = 15;
+                    index1 = 1; index2 = 2;
+*/
+int *returnIndex(int *num, int target);
+void test1();
+
+/* Practice2: Digital flip, only consider the 32bit integer;
+                for example:
+                    num = 123;
+                    target = 321;
+*/
+int reverse(int *num);
+void test2();
+
+/* Practice3: Palindrome judgment, only consider the integer;
+                for example:
+                    num = 121; -> bool = true;
+                    num = 123; -> bool = false;
+            note:how to varify the string is a palindrome or not?  easily, just uses the "for" circle to get the flip char,then compare! 
+                 other, uses the "reverse" function
+ */
+bool isPalindrome(int num);
+void test3();
+
+/* Practice4: Roman numbers change to integer
+                for example:
+                VII -> 7
+*/
+int CharToInt(char c);
+int RomanToInt(char *s);
+void test4();
+int main(){
+    test1();
+    test2();
+    test3();
+    test4();
+    return 0;
+}
+//practice1
+int *returnIndex(int *num, int target){
+    int *res = (int *)malloc(sizeof(int) * 2);
+    for(int i = 0; i < sizeof(num)-1; ++i){
+        //If the value is larger than the target value, we choose to skip it!
+        if (num[i] <= target){
+            for(int j = i + 1; j < sizeof(num); ++j){
+            if(num[i] + num[j] == target){
+                res[0] = i;
+                res[1] = j;
+            }
+        }
+    }
+
+        }
+        
+    return res;
+}
+
+void test1(){
+    int nums[] = {1, 5, 10, 12, 8};
+    int target = 15;
+    int *res = returnIndex(nums, target);
+    cout <<"practice1 success! the first index is " << res[0] << "; the second index is " << res[1] << endl;
+}
+
+//practice2
+int reverse(int *num){
+    int value = 0;
+    while(*num != 0){
+        value = value * 10 + (*num) % 10;
+        *num = *num / 10;
+    }
+    //when the value is larger than 32bit or less than -32bit, return zero;
+    return (value > 2147483647) || (value < -2147483648) ? 0 : value;
+}
+void test2(){
+    int num = 12345;
+    int res = reverse(&num);
+    cout << "practice2 success! the reverse number is " << res << endl;
+}
+
+bool isPalindrome(int num){
+    int temp = num;
+    int value = 0;
+    while (num != 0)
+    {
+       value = value * 10 + num % 10;
+       num /= 10;
+    }
+    if(value == temp) return true;
+    else return false;
+    
+}
+void test3(){
+    int num = 0;
+    cout << "please input an integer: ";
+    cin >> num;
+    bool res = isPalindrome(num);
+    if (res) cout << "practice3 success! the number " << num << "is a palindrome!" << endl;
+    else cout << "practice3 success! the number " << num << "is not a palindrome!" << endl;
+}
+
+int CharToInt(char c){
+    char strArray[7] = {'I','V','X','L','C','D','M'};
+    int intArray[7] = {1,5,10,50,100,500,1000};
+    for(int i = 0; i < 7; i++){
+        if(strArray[i] == c){
+            return intArray[i];
+        }
+    }
+    return 0;
+}
+
+int RomanToInt(char *s){
+    int value = 0;
+    int c = 0;
+    int n = 0;
+    for(int i = 0; i < sizeof(s) - 1; ++i){
+        c = CharToInt(s[i]);
+        n = CharToInt(s[i+1]);
+        value = (c < n) ? value - c : value + c;
+    }
+    value += CharToInt(s[sizeof(s)-1]);
+    return value;
+}
+
+void test4(){
+    char s[] = "VII";
+    int res = RomanToInt(s);
+    cout << "practice4 success! the relevant number is " << res << endl;
+}

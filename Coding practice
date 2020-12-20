@@ -4,7 +4,11 @@
 #include<stdio.h>
 #include<memory.h>
 #include<vector>
+#include<stack>
+#include<deque>
+#include<list>
 using namespace std;
+
 /* Practice1: Find the index whose sum of the two numbers is the target value;
                for example:
                     nums = {1, 5, 10, 12, 8};
@@ -13,6 +17,7 @@ using namespace std;
 */
 int *returnIndex(int *num, int target);
 void test1();
+
 /* Practice2: Digital flip, only consider the 32bit integer;
                 for example:
                     num = 123;
@@ -20,6 +25,7 @@ void test1();
 */
 int reverse(int *num);
 void test2();
+
 /* Practice3: Palindrome judgment, only consider the integer;
                 for example:
                     num = 121; -> bool = true;
@@ -29,6 +35,7 @@ void test2();
  */
 bool isPalindrome(int num);
 void test3();
+
 /* Practice4: Roman numbers change to integer
                 for example:
                 VII -> 7
@@ -36,7 +43,8 @@ void test3();
 int CharToInt(char c);
 int RomanToInt(char *s, int strsSize);
 void test4();
-/* Practice5:  Longest common prefix
+
+/* Practice5: Longest common prefix
                 for example:
                     strs = {"flight", "fly", "flip"};
                     result = "fl";
@@ -46,12 +54,65 @@ void test4();
 char *ReturnLCP(char **s, int strsSize);
 string ReturnLCP2(vector<string> vec);
 void test5();
+
+/* Practice6: Checks for valid parentheses for a string
+                for example:
+                    str = "()" ---> true
+                    str = "([{)" ---> false
+*/
+
+bool isValidParentheses(string str);
+void test6();
+
+/* Practice7: Merge two ordered linked lists
+                for example:
+                    L1 = {1, 3, 5};
+                    L2 = {2, 4, 6};
+                    L = {1, 2, 3, 4, 5, 6}
+*/
+list<int> mergeTwolist(list<int> l1, list<int> l2);
+void test7();
+
+/* Practice8: Delete duplicates
+                for example:
+                nums = [1,1,2]
+                result = [1,2]
+                only deal with one matrix
+*/
+int DelDup(int *nums, int numsSize);
+void test8();
+
+/* Practice9: Remove target
+                for example:
+                    nums = [1, 2, 2, 3, 2, 4] 
+                    target = 2
+                    result = [1, 3, 4]
+                    only solve with one matrix
+ */
+int RemoveTarget(int *nums, int numsSize, int target);
+void test9();
+
+/*  Practic10: Implement the strSTR() function
+                for example:
+                    haystack = "hello"
+                    needle1 = "ll"
+                    needle2 = "g++"
+                    res1 = 2;
+                    res2 = -1;
+*/
+int ImpStrFunc(string haystack, string needle);
+void test10();
 int main(){
     //test1();
     //test2();
     //test3();
     //test4();
-    test5();
+    //test5();
+    //test6();
+    //test7();
+    //test8();
+    //test9();
+    test10();
     return 0;
 }
 //practice1
@@ -67,16 +128,19 @@ int *returnIndex(int *num, int target){
             }
         }
     }
+
         }
         
     return res;
 }
+
 void test1(){
     int nums[] = {1, 5, 10, 12, 8};
     int target = 15;
     int *res = returnIndex(nums, target);
     cout <<"practice1 success! the first index is " << res[0] << "; the second index is " << res[1] << endl;
 }
+
 //practice2
 int reverse(int *num){
     int value = 0;
@@ -92,6 +156,7 @@ void test2(){
     int res = reverse(&num);
     cout << "practice2 success! the reverse number is " << res << endl;
 }
+
 bool isPalindrome(int num){
     int temp = num;
     int value = 0;
@@ -112,6 +177,7 @@ void test3(){
     if (res) cout << "practice3 success! the number " << num << "is a palindrome!" << endl;
     else cout << "practice3 success! the number " << num << "is not a palindrome!" << endl;
 }
+
 int CharToInt(char c){
     char strArray[7] = {'I','V','X','L','C','D','M'};
     int intArray[7] = {1,5,10,50,100,500,1000};
@@ -122,6 +188,7 @@ int CharToInt(char c){
     }
     return 0;
 }
+
 int RomanToInt(char *s){
     int value = 0;
     int c = 0;
@@ -134,11 +201,13 @@ int RomanToInt(char *s){
     value += CharToInt(s[sizeof(s)-1]);
     return value;
 }
+
 void test4(){
     char s[] = "VII";
     int res = RomanToInt(s);
     cout << "practice4 success! the relevant number is " << res << endl;
 }
+
 char *ReturnLCP(char **s, int strsSize){
     if(strsSize == 0) return (char *)" ";
     else if(strsSize == 1) return s[0]; 
@@ -160,6 +229,7 @@ char *ReturnLCP(char **s, int strsSize){
     strncpy(res, s[0], j);
     return res;
 }
+
 string ReturnLCP2(vector<string> vec){
     string str;
     if(vec.size() == 0) return " ";
@@ -179,6 +249,7 @@ string ReturnLCP2(vector<string> vec){
     str = vec[0].substr(0, j);
     return str;
 }
+
 void test5(){
     //"flight";"fly";"flip" are string type, so we should use (char *) to change it as char type
     char *str[] = {(char *)"flight", (char *)"fly", (char *)"flip"};
@@ -192,198 +263,161 @@ void test5(){
     string str2 = ReturnLCP2(vec);
     cout << "practice5 solution2 success! the longest common prefix is " << str2 << endl;
 }
-/****This is a practice for improving coding capabilities!*/
-#include<iostream>
-#include<string>
-#include<stdio.h>
-#include<memory.h>
-#include<vector>
-using namespace std;
-/* Practice1: Find the index whose sum of the two numbers is the target value;
-               for example:
-                    nums = {1, 5, 10, 12, 8};
-                    target = 15;
-                    index1 = 1; index2 = 2;
-*/
-int *returnIndex(int *num, int target);
-void test1();
-/* Practice2: Digital flip, only consider the 32bit integer;
-                for example:
-                    num = 123;
-                    target = 321;
-*/
-int reverse(int *num);
-void test2();
-/* Practice3: Palindrome judgment, only consider the integer;
-                for example:
-                    num = 121; -> bool = true;
-                    num = 123; -> bool = false;
-            note:how to varify the string is a palindrome or not?  easily, just uses the "for" circle to get the flip char,then compare! 
-                 other, uses the "reverse" function
- */
-bool isPalindrome(int num);
-void test3();
-/* Practice4: Roman numbers change to integer
-                for example:
-                VII -> 7
-*/
-int CharToInt(char c);
-int RomanToInt(char *s, int strsSize);
-void test4();
-/* Practice5:  Longest common prefix
-                for example:
-                    strs = {"flight", "fly", "flip"};
-                    result = "fl";
-                solution1: solve it by c
-                solution2: solve it by c++ STL
-*/
-char *ReturnLCP(char **s, int strsSize);
-string ReturnLCP2(vector<string> vec);
-void test5();
-int main(){
-    //test1();
-    //test2();
-    //test3();
-    //test4();
-    test5();
-    return 0;
-}
-//practice1
-int *returnIndex(int *num, int target){
-    int *res = (int *)malloc(sizeof(int) * 2);
-    for(int i = 0; i < sizeof(num)-1; ++i){
-        //If the value is larger than the target value, we choose to skip it!
-        if (num[i] <= target){
-            for(int j = i + 1; j < sizeof(num); ++j){
-            if(num[i] + num[j] == target){
-                res[0] = i;
-                res[1] = j;
-            }
+
+bool isValidParenthese(string str){
+    deque<char> sta;
+    int top = 0;
+    if(str.size() <= 0) return true;
+    for(int i = 0; i < str.size(); ++i) {
+        //there shouldn't use "(",because "" represent char*.
+        if(str[i] == '(' || str[i] == '[' || str[i] == '{'){
+            sta.push_back(str[i]);
+            top++;
         }
-    }
+        else
+        {
+            if(--top < 0 ) return false;
+            else if(str[i] == ')' && sta[top] != '(') return false; 
+            else if(str[i] == ']' && sta[top] != '[') return false;
+            else if(str[i] == '}' && sta[top] != '{') return false;
         }
         
-    return res;
-}
-void test1(){
-    int nums[] = {1, 5, 10, 12, 8};
-    int target = 15;
-    int *res = returnIndex(nums, target);
-    cout <<"practice1 success! the first index is " << res[0] << "; the second index is " << res[1] << endl;
-}
-//practice2
-int reverse(int *num){
-    int value = 0;
-    while(*num != 0){
-        value = value * 10 + (*num) % 10;
-        *num = *num / 10;
     }
-    //when the value is larger than 32bit or less than -32bit, return zero;
-    return (value > 2147483647) || (value < -2147483648) ? 0 : value;
+    if(top > 0) return false;
+    return true;
 }
-void test2(){
-    int num = 12345;
-    int res = reverse(&num);
-    cout << "practice2 success! the reverse number is " << res << endl;
+
+void test6(){
+    string str = "((({[()]})))";
+    bool res = isValidParenthese(str);
+    if(res) cout <<"practice6 success! the input string is a valid parenthese!" << endl;
 }
-bool isPalindrome(int num){
-    int temp = num;
-    int value = 0;
-    while (num != 0)
+
+list<int> mergeTwolist(list<int> l1, list<int> l2){
+    list<int> l3;
+    list<int>::iterator itr1 = l1.begin();
+    list<int>::iterator itr2 = l2.begin();
+    while(itr1 != l1.end()){
+        if(*itr1 < *itr2) {
+            l3.push_back(*itr1);
+            itr1++;
+        }
+        else if(*itr1 == *itr2) {
+            l3.push_back(*itr1);
+            l3.push_back(*itr2);
+            itr1++;
+            itr2++;
+        }
+        else
+        {
+            l3.push_back(*itr2);
+            itr2++;
+        }
+    }
+    while (itr2 !=  l2.end())
     {
-       value = value * 10 + num % 10;
-       num /= 10;
+        l3.push_back(*itr2);
+        itr2++;
     }
-    if(value == temp) return true;
-    else return false;
-    
+     
+  return l3;
 }
-void test3(){
-    int num = 0;
-    cout << "please input an integer: ";
-    cin >> num;
-    bool res = isPalindrome(num);
-    if (res) cout << "practice3 success! the number " << num << "is a palindrome!" << endl;
-    else cout << "practice3 success! the number " << num << "is not a palindrome!" << endl;
-}
-int CharToInt(char c){
-    char strArray[7] = {'I','V','X','L','C','D','M'};
-    int intArray[7] = {1,5,10,50,100,500,1000};
-    for(int i = 0; i < 7; i++){
-        if(strArray[i] == c){
-            return intArray[i];
-        }
+void test7(){
+    list<int> l1;
+    list<int> l2;
+    for(int i=0; i <= 5; i++){
+        l1.push_back(i + 2);
+        l2.push_back(2*i + 1);
     }
-    return 0;
+    list<int> l3 = mergeTwolist(l1,l2);
+    cout << "the first list is: ";
+    for(list<int>::iterator itr = l1.begin(); itr != l1.end(); itr++) cout << *itr << " ";
+    cout << endl;
+    cout << "the second list is: ";
+    for(list<int>::iterator itr = l2.begin(); itr != l2.end(); itr++) cout << *itr << " ";
+    cout << endl;
+    cout << "the merge list is: ";
+    for(list<int>::iterator itr = l3.begin(); itr != l3.end(); itr++) cout << *itr << " ";
+    cout << "  practice7 success!" << endl;
 }
-int RomanToInt(char *s){
-    int value = 0;
-    int c = 0;
-    int n = 0;
-    for(int i = 0; i < sizeof(s) - 1; ++i){
-        c = CharToInt(s[i]);
-        n = CharToInt(s[i+1]);
-        value = (c < n) ? value - c : value + c;
-    }
-    value += CharToInt(s[sizeof(s)-1]);
-    return value;
-}
-void test4(){
-    char s[] = "VII";
-    int res = RomanToInt(s);
-    cout << "practice4 success! the relevant number is " << res << endl;
-}
-char *ReturnLCP(char **s, int strsSize){
-    if(strsSize == 0) return (char *)" ";
-    else if(strsSize == 1) return s[0]; 
-    int i = 0;//the index of string in matrix
-    int j = 0;//the subscript of char in string
-    while(1){
-        if(s[i][j] == '\0') break;
-        if(s[i][j] ==  s[++i][j]){
-            if(i == strsSize -1){
-                j++;
-                i = 0;
-            }
- 
-        }
-        else break;
-    }
-    char* res = (char *)malloc(j + 1);
-    memset(res, 0, j+1);
-    strncpy(res, s[0], j);
-    return res;
-}
-string ReturnLCP2(vector<string> vec){
-    string str;
-    if(vec.size() == 0) return " ";
-    else if(vec.size() == 1) return vec.at(0);
-    int i = 0;
+
+int DelDup(int *nums, int numsSize){
     int j = 0;
-    while (1){
-        if(vec[i].size() == j) break;
-        else if(vec[i][j] == vec[++i][j]){
-            if(i = vec.size() - 1){
-                j++;
-                i=0;
-            }
+    if(nums == NULL || numsSize < 0) return 0;
+    for(int i = 0; i < numsSize - 1; i++){
+        if(nums[i] != nums[i+1]){
+            nums[j++] = nums[i];// === nums[j] = nums[i];j++
         }
-        else break;
+    }    
+    nums[j] = nums[numsSize - 1];
+    return j+1;
+}
+
+void test8(){
+    int nums[] = {1, 2, 2, 3, 3, 5};
+    int res = DelDup(nums, 6);
+    cout << "practice8 success! the result is ";
+    for(int i = 0; i < res; i++){
+        cout << nums[i] << " ";
     }
-    str = vec[0].substr(0, j);
-    return str;
+    cout << endl;
 }
-void test5(){
-    //"flight";"fly";"flip" are string type, so we should use (char *) to change it as char type
-    char *str[] = {(char *)"flight", (char *)"fly", (char *)"flip"};
-    int strsSize = 3;
-    char *res = ReturnLCP(str, strsSize);
-    cout << "practice5 success! the longest common prefix is " << res << endl;
-    vector<string> vec;
-    vec.push_back("flight");
-    vec.push_back("fly");
-    vec.push_back("flip");
-    string str2 = ReturnLCP2(vec);
-    cout << "practice5 solution2 success! the longest common prefix is " << str2 << endl;
+
+int RemoveTarget(int *nums, int numsSize, int target){
+    int j = 0;
+    if(nums == NULL || numsSize < 0) return 0;
+    for(int i = 0; i < numsSize; i++){
+        if(nums[i] != target) {
+            nums[j] = nums[i];
+            j++;
+        }
+        
+    }
+    return j;
 }
+void test9(){
+    int nums[] = {1, 2, 2, 3};
+    int numsSize = 4;
+    int target = 2;
+    int res = RemoveTarget(nums, numsSize, target);
+    cout << "practice9 success! the terminal matrix is ";
+    for(int i = 0; i < res; i++){
+        cout << nums[i] << " ";
+    }
+    cout << endl;
+}
+
+int ImpStrFunc(string haystack, string needle){
+    int index1 = 0;
+    int res = 0;
+    int count = 0;
+    if(haystack.size() == 0) return -1;
+    while(index1 != haystack.size()){
+        count = index1;
+        if(haystack[count] == needle[0]){
+            for(int i = 1; i < needle.size();){
+                if(needle[i] != haystack[count + 1]){
+                    break;
+                }
+                else
+                {
+                    res = i;
+                    i++;
+                }
+                
+            }
+            if(res == needle.size() -1) return index1;
+        }
+        index1++;
+    }
+    return -1;
+}
+
+void test10(){
+    string haystack = "hello";
+    string needle = "ll";
+    int res = ImpStrFunc(haystack, needle);
+    cout << "practice10 success! the first index of needle string in haystack string is " << res << endl;
+}
+
 

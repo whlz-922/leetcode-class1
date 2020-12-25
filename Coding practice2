@@ -1,0 +1,87 @@
+/*name:wacky
+ *envioment:ubuntu
+ * **/
+#include<iostream>
+#include<vector>
+#include<cstring>
+#include<string>
+using namespace std;
+/* practice1: Find the index of target value in vector or reback the suitable index
+ *  for example:
+ *  vec = [1, 3, 5, 7, 9]
+ *  target1 = 3; ---> res = 1;
+ *  target2 = 4; ---> res = 2;
+ * */
+int ReturnIndex(int *nums, int numsSize, int target);
+void test1();
+
+/** practice2: The appearance of array
+ *   for example:
+ *    1--->1
+ *    11-->2
+ *    21-->3
+ *    1211->4
+ *    111221 ->5
+ *   request: for an integer between 0 and 30, you should output the relative sequence
+ * */
+string countAndsay(int num);
+void test2();
+int main(){
+ //test1();
+     test2();
+ return 0;
+}
+
+int ReturnIndex(int *nums, int numsSize, int target){
+ if(nums == NULL || nums[0] > target) return 0;
+ for(int i = 0; i < numsSize; i++){  
+  if(nums[i] == target) return i;
+  else if(nums[i] < target && target < nums[i+1]) return i+1;
+ }
+ return numsSize;
+}
+
+void test1(){
+ int nums[] = {1, 3, 5, 7, 9};
+ int numsSize = 5;
+ int target1 = 5;
+ int target2 = 8;
+ int res1 = ReturnIndex(nums, numsSize, target1);
+ int res2 = ReturnIndex(nums, numsSize, target2);
+ cout << "practice1 success! the index of value " << target1 << " is " << res1 
+      << ";  the index of value " << target2 << " is " << res2 << endl;
+}
+
+string countAndsay(int num){
+ if(num == 1) return "1";    
+ //countAndsay(1) --> countAndsay(2) -->..countAndsay(num)+描述代码
+ string str = countAndsay(num - 1);
+ char buf = str[0];
+ int count = 1;
+ string temp = "";
+ //基本实现思路：先判断相邻位数是否一致，一致则用count记录一致的个数，若不一致，则停止计数，用
+ //count描述该位数，得到下一步的数字
+ for(int i = 1; i < str.length(); i++){
+  if(str[i] == str[i - 1]){
+   count++;
+   continue;
+  }
+  if(str[i] != str[i - 1]){
+   char x = count + '0';
+   temp += x;
+   temp += buf;
+   buf = str[i];
+   count = 1;
+  }
+ }
+ char x = '0' + count;
+ temp +=x;
+ temp +=buf;
+ return temp;
+}
+void test2(){
+ int num =2;
+ string str = countAndsay(num);
+ cout << "practice2 success! the sequence of number " << num << " is "<< str << endl;
+}
+

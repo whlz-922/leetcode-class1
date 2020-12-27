@@ -7,81 +7,192 @@
 #include<string>
 using namespace std;
 /* practice1: Find the index of target value in vector or reback the suitable index
- *  for example:
- *  vec = [1, 3, 5, 7, 9]
- *  target1 = 3; ---> res = 1;
- *  target2 = 4; ---> res = 2;
+ *		for example:
+ *		vec = [1, 3, 5, 7, 9]
+ *		target1 = 3; ---> res = 1;
+ *		target2 = 4; ---> res = 2;
  * */
 int ReturnIndex(int *nums, int numsSize, int target);
 void test1();
 
 /** practice2: The appearance of array
- *   for example:
- *    1--->1
- *    11-->2
- *    21-->3
- *    1211->4
- *    111221 ->5
- *   request: for an integer between 0 and 30, you should output the relative sequence
+ * 		for example:
+ * 			1--->1
+ * 			11-->2
+ * 			21-->3
+ * 			1211->4
+ * 			111221 ->5
+ * 		request: for an integer between 0 and 30, you should output the relative sequence
  * */
 string countAndsay(int num);
 void test2();
+
+/** practice3: Sum of the larget suborders
+ *		for example:
+ *			nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+ *			ouput = 6;
+ *			explain:[4, -1, 2, 1] is the larget suborders, its' sum is 6;	
+ * */
+int SumOftheLargestSuborders(int *nums, int numsSize);
+void test3();
+
+/** practice4: The length of the last word
+ * 		for example:
+ * 			str = "hello world";
+ * 			res = 5;
+ * */
+int returnwordlength(string str);
+void test4();
+
+/** practice5: Add one to a integer array
+ * 		for example:
+ * 			nums = [1, 2, 3, 4]
+ * 			res = [1, 2, 3, 5]
+ *
+ * */
+
+int *plusone(int *nums, int numsSize, int *returnSize);
+void test5();
 int main(){
- //test1();
-     test2();
- return 0;
+	//test1();
+    	//test2();
+	//test3();
+	//test4();
+	test5();
+	return 0;
 }
 
 int ReturnIndex(int *nums, int numsSize, int target){
- if(nums == NULL || nums[0] > target) return 0;
- for(int i = 0; i < numsSize; i++){  
-  if(nums[i] == target) return i;
-  else if(nums[i] < target && target < nums[i+1]) return i+1;
- }
- return numsSize;
+	//先判断字符数组是否为空或者第一个字符是否大于目标值，若成立，则直接返回数组第一个下标即可
+	if(nums == NULL || nums[0] > target) return 0;
+	//遍历寻找和比较
+	for(int i = 0; i < numsSize; i++){		
+		if(nums[i] == target) return i;
+		else if(nums[i] < target && target < nums[i+1]) return i+1;
+	}
+	return numsSize;
 }
 
 void test1(){
- int nums[] = {1, 3, 5, 7, 9};
- int numsSize = 5;
- int target1 = 5;
- int target2 = 8;
- int res1 = ReturnIndex(nums, numsSize, target1);
- int res2 = ReturnIndex(nums, numsSize, target2);
- cout << "practice1 success! the index of value " << target1 << " is " << res1 
-      << ";  the index of value " << target2 << " is " << res2 << endl;
+	int nums[] = {1, 3, 5, 7, 9};
+	int numsSize = 5;
+	int target1 = 5;
+	int target2 = 8;
+	int res1 = ReturnIndex(nums, numsSize, target1);
+	int res2 = ReturnIndex(nums, numsSize, target2);
+	cout << "practice1 success! the index of value " << target1 << " is " << res1 
+	     << ";  the index of value " << target2 << " is " << res2 << endl;
 }
-
+//迭代实现
 string countAndsay(int num){
- if(num == 1) return "1";    
- //countAndsay(1) --> countAndsay(2) -->..countAndsay(num)+描述代码
- string str = countAndsay(num - 1);
- char buf = str[0];
- int count = 1;
- string temp = "";
- //基本实现思路：先判断相邻位数是否一致，一致则用count记录一致的个数，若不一致，则停止计数，用
- //count描述该位数，得到下一步的数字
- for(int i = 1; i < str.length(); i++){
-  if(str[i] == str[i - 1]){
-   count++;
-   continue;
-  }
-  if(str[i] != str[i - 1]){
-   char x = count + '0';
-   temp += x;
-   temp += buf;
-   buf = str[i];
-   count = 1;
-  }
- }
- char x = '0' + count;
- temp +=x;
- temp +=buf;
- return temp;
+	if(num == 1) return "1";    
+	//countAndsay(1) --> countAndsay(2) -->..countAndsay(num)+描述代码
+	string str = countAndsay(num - 1);
+	char buf = str[0];
+	int count = 1;//统计相同字符的个数
+	string temp = "";
+	//当字符串的长度大于或等于2时，开始比较相邻两个字符并进行计数，创建新字符串（统计结果+统计对象）用以描述统计结果
+	for(int i = 1; i < str.length(); i++){
+		if(str[i] == str[i - 1]){
+			count++;
+			continue;
+		}
+		//相邻字符不等时说明统计结束，开始创建新字符串（统计结果+统计对象）
+		if(str[i] != str[i - 1]){
+			char x = count + '0';//将计数转为字符
+			temp += x;//将被转为字符的统计数放入string中
+			buf = str[i];//取当前统计的字符
+			temp += buf;//将统计数和相应字符拼接，得到该字段的描述
+			count = 1;//将计数归为1
+		}
+	}
+	//进行字符串最后一个字符的描述（第一次迭代是“1”，被当作是最后一位）
+	char x = '0' + count;
+	temp +=x;
+	temp +=buf;
+	return temp;
 }
 void test2(){
- int num =2;
- string str = countAndsay(num);
- cout << "practice2 success! the sequence of number " << num << " is "<< str << endl;
+	int num = 4;
+	string str = countAndsay(num);
+	cout << "practice2 success! the sequence of number " << num << " is "<< str << endl;
 }
 
+int SumOftheLargestSuborders(int *nums, int numsSize){
+	int max = nums[0];//先假定第一个数即为最大子序列
+	int temp = 0;
+	for(int i = 0; i < numsSize; i++){
+		temp += nums[i];//子序列和
+		if(temp > max) max = temp;//如果子序列和大于当前max所存的值，则将子序列值赋给max
+		if(temp < 0) temp = 0;//当子序列和小于0时，将其赋值为0，重新初始化，使max保持当前的“最大值”，直到找到下一个最大值
+	}
+	return max;
+}
+
+void test3(){
+	int nums[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+	int numsSize = 9;
+	int res = SumOftheLargestSuborders(nums, numsSize);
+	cout << "practice3 success! sum of the larget suborders is " << res << endl;
+}
+
+int returnwordlength(string str){
+	if(str.length() <= 0) return 0;//当字符串为空时，直接返回0
+	int index1 = 0;
+	int index2 = 0;
+	for(int i = str.length(); i >= 0; i--){
+		//判断最后一个单词后是否还有空格
+		if(str[i] == ' ' && str[i - 1] != ' '){
+			index1 = i - 1;
+			break;
+		}
+	}
+	for(int i = str.length() - 1; i >= 0; i--){
+		//当从后往前遍历遇到空字符时，直接返回该空字符的下标，为了防止字符串最后一个字符为空格，加一个判定条件即空格后的第一位必须是字符,且i不等于最后一个字符（含空格）下标
+		if(str[i] == ' ' && str[i+1] != ' ' && i != str.length() -1) {
+			index2 = i;
+			break;	
+		}
+	}
+	if(index1 > index2) return index1 - index2;
+	else if(index1 <= index2) return str.length() - 1 - index2;
+	return 0;//如果字符串全是空格，则返回0
+}
+
+void test4(){
+	string str = "hello world ";
+	int res = returnwordlength(str);
+	cout <<"practice4 success! the length of last word in string is " << res << endl;
+}
+
+int *plusone(int *nums, int numsSize, int *returnSize){
+	//在堆区创建一个可维护的空间，用以存储进行加法运算后的结果
+	int *buf = new int[5];
+	//只对最后一位数进行加1，如果最后一位数是9，则要将该位置为0并进位
+	for(int i = numsSize - 1; i >= 0; i--){
+		if(nums[i] + 1 == 10) nums[i] = 0;
+		else{
+			nums[i] += 1;
+			returnSize[0] = numsSize;//当所有位数含有不为9的数时，则数组元素的数量不变
+			return nums;
+		}
+	}
+	//当传入的数组所有元素均为9时，则需要在最前面加1，然后把已置0的其他位数按顺序放入临时数组中
+	buf[0] = 1;
+	for(int i = 0, j = 1; i < numsSize; i++, j++){
+		buf[j] = nums[i];
+	}
+	returnSize[0] = numsSize + 1;
+	int *res = buf;
+	delete []buf;//释放内存，防止内存泄漏
+	return res;
+}
+void test5(){
+	int nums[] = {1, 2, 3};
+	int numsSize = sizeof(nums)/sizeof(int);
+	int returnSize[] = {0};
+	int *res = plusone(nums, numsSize, returnSize);
+	cout << "practice5 success! after add one to the array, the result is " << endl;
+	for(int i = 0; i < returnSize[0]; i++) cout << res[i];
+	cout << endl;
+}

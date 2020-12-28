@@ -167,7 +167,7 @@ void test4(){
 
 int *plusone(int *nums, int numsSize, int *returnSize){
 	//在堆区创建一个可维护的空间，用以存储进行加法运算后的结果
-	int *buf = new int[5];
+	int *buf = new int[numsSize + 2];
 	//只对最后一位数进行加1，如果最后一位数是9，则要将该位置为0并进位
 	for(int i = numsSize - 1; i >= 0; i--){
 		if(nums[i] + 1 == 10) nums[i] = 0;
